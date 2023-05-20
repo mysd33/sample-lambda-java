@@ -1,11 +1,12 @@
 # Private APIでのAPIGatewayを使ったLambda/Java/SpringBoot&CloudFunctionのAWS SAMサンプルAP
 
-* 参考サイト
+* Spring Cloud Functionを利用したLambda、AWS SAMに関する参考サイト
     * https://catalog.workshops.aws/java-on-aws-lambda/en-US/03-snapstart
     * https://maciejwalkowiak.com/blog/create-spring-cloud-function-aws-sam/
-    * https://docs.spring.io/spring-cloud-function/docs/current/reference/html/spring-cloud-function.html
+    * https://docs.spring.io/spring-cloud-function/docs/current/reference/html/
 
-* 今後記載予定
+* 実行方法
+    * 今後、記載の充実化を予定
 
 ```sh
 # ビルド

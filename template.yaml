@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  sam-app
+  todo-app
 
-  Sample SAM Template for sam-app
+  Sample SAM Template for todo-app
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -29,8 +29,9 @@ Resources:
       AutoPublishAlias: snap      
       Environment:
         Variables:
+          # Spring Cloud Function Environment Variable for function to call
           SPRING_CLOUD_FUNCTION_DEFINITION: userPutAPIHandler
-          # Tiered Compilation Optimization
+          # Java Tiered Compilation Optimization
           JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"          
       Events:
         UserService:
