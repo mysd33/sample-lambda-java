@@ -11,14 +11,21 @@
 ```sh
 # ビルド
 mvn clean package
+# Windowsにmakeをインストールすればmakeでもいけます
+make
 
 # デプロイ
 # 1回目
 sam deploy -t template.yaml --guided
+# Windowsにmakeをインストールすればmakeでもいけます
+make deploy_guided
+
 # 2回目以降
 sam deploy -t template.yaml
+# Windowsにmakeをインストールすればmakeでもいけます
+make deploy
 
-# 動作確認
+# AP動作確認
 curl -X POST -H "Content-Type: application/json" -d '{ "userName" : "Taro"}' https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users
 
 # スタック削除
