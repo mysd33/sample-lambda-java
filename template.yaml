@@ -18,9 +18,9 @@ Parameters:
     MinValue: 128
     MaxValue: 10240
     Default: 2048 
-  UsersTableName:
-    Type: String
-    Default: users    
+#  UsersTableName:
+#    Type: String
+#    Default: users    
   TodoTableName:
     Type: String
     Default: todo
@@ -42,10 +42,6 @@ Parameters:
     AllowedPattern: '[a-zA-Z0-9]*'
     ConstraintDescription: must contain only alphanumeric characters.
     Default: password
-  DBName:
-    Description: Database Name
-    Type: String
-    Default: testdb    
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -74,16 +70,21 @@ Globals:
         # Java Tiered Compilation Optimization
         JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"         
         # For DynamoDB
-        USERS_TABLE_NAME: !Ref UsersTableName         
+        # USERS_TABLE_NAME: !Ref UsersTableName         
         TODO_TABLE_NAME: !Ref TodoTableName       
         # For RDB        
-        #RDB_USER: !Ref DBUsername        
-        #RDB_PASSWORD: !Ref DBPassword
-        #RDB_ENDPOINT:
-        #  Fn::ImportValue: !Sub ${StackPrefix}-RDSProxyEndpoint
-        #RDB_PORT: 5432
-        #RDB_DB_NAME: !Ref DBName 
-        
+        RDB_USER: !Ref DBUsername        
+        RDB_PASSWORD: !Ref DBPassword
+        RDB_ENDPOINT_URL:          
+          Fn::Join:
+            - ""
+            - - "jdbc:postgresql://"
+              - Fn::ImportValue: !Sub ${StackPrefix}-RDSProxyEndpoint
+              - ":"
+              - Fn::ImportValue: !Sub ${StackPrefix}-RDSClusterEndpointPort
+              - "/"
+              - Fn::ImportValue: !Sub ${StackPrefix}-RDSDBName        
+
     #TODO: CodeDeploy
     #DeploymentPreference:
     #  Type: AllAtOnce             

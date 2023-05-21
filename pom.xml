@@ -17,6 +17,7 @@
         <maven.compiler.target>17</maven.compiler.target>        
         <spring-cloud.version>2022.0.2</spring-cloud.version>
         <spring-boot-thin-layout.version>1.0.29.RELEASE</spring-boot-thin-layout.version>
+		<mybatis-spring-boot-starter.version>3.0.1</mybatis-spring-boot-starter.version>                
         <aws-sdk.version>2.20.55</aws-sdk.version>
         <aws-lambda-java-core.version>1.2.2</aws-lambda-java-core.version>
         <aws-lambda-java-events.version>3.11.1</aws-lambda-java-events.version>
@@ -24,10 +25,28 @@
     </properties>
 
     <dependencies>
+        <!-- Spring Cloud Function -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-aws</artifactId>
-        </dependency>        
+        </dependency>      
+        <!-- Lambda SDK -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>${aws-lambda-java-core.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-lambda-java-events</artifactId>
+          <version>${aws-lambda-java-events.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.crac</groupId>
+            <artifactId>org-crac</artifactId>
+            <version>${org-crac.version}</version>
+        </dependency>
+        <!-- DynamoDB SDK -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>dynamodb</artifactId>
@@ -45,32 +64,28 @@
             -->
         </dependency>
         <dependency>
-			<groupId>software.amazon.awssdk</groupId>
-			<artifactId>dynamodb-enhanced</artifactId>
-		</dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb-enhanced</artifactId>
+        </dependency>        
+        <!-- MyBatis -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-        <!-- TODO: Add Library(Mybatis etc...) -->
-        
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-core</artifactId>
-            <version>${aws-lambda-java-core.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.amazonaws</groupId>
-          <artifactId>aws-lambda-java-events</artifactId>
-          <version>${aws-lambda-java-events.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.crac</groupId>
-            <artifactId>org-crac</artifactId>
-            <version>${org-crac.version}</version>
-        </dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>        
+        <!-- JUnit -->        
         <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>          

@@ -1,9 +1,6 @@
 package com.example.backend.infra.repository;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 
 import com.example.backend.domain.model.User;
 import com.example.backend.domain.repository.UserRepository;
@@ -18,7 +15,8 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 /**
  * DynamoDBにアクセスするUserRepository実装クラス
  */
-@Repository
+//MyBatis版に置き換えたため未使用
+//@Repository
 @RequiredArgsConstructor
 public class UserRepositoryImplByDynamoDB implements UserRepository {
     private final DynamoDbEnhancedClient enhancedClient;
@@ -29,11 +27,10 @@ public class UserRepositoryImplByDynamoDB implements UserRepository {
     // （参考）DynamoDbEnhancedClientの実装例
     // https://docs.aws.amazon.com/ja_jp/sdk-for-java/latest/developer-guide/examples-dynamodb-enhanced.html
     // https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javav2/example_code/dynamodb/src/main/java/com/example/dynamodb
-
     
     @Override
     public boolean insert(User user) {
-        user.setUserId(UUID.randomUUID().toString());
+        //user.setUserId(UUID.randomUUID().toString());
         DynamoDbTable<UserTableItem> dynamoDb = createDynamoDBClient();
         UserTableItem userItem = UserTableItem.builder()//
                 .userId(user.getUserId())

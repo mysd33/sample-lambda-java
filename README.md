@@ -14,7 +14,14 @@
     * VPC内にEC2で構築した、Bastionからアクセスする
 * LambdaからDynamoDBやRDS AuroraへのDBアクセスを実現
     * LambdaはVPC内Lambdaとして、RDS Aurora（RDS Proxy経由）でのアクセスも可能としている
-* TODO: APのRDBアクセスは対応中(現在は、UserテーブルもDynamoDBアクセスで実装)
+
+## 事前準備
+* 以下のライブラリを用いているので、EclipseのようなIDEを利用する場合には、プラグインのインストールが必要
+    * [Lombok](https://projectlombok.org/)
+        * [Eclipseへのプラグインインストール](https://projectlombok.org/setup/eclipse)
+        * [IntelliJへのプラグインインストール](https://projectlombok.org/setup/intellij)
+    * TODO: [Mapstruct](https://mapstruct.org/)の利用も検討中
+        * [EclipseやIntelliJへのプラグインインストール](https://mapstruct.org/documentation/ide-support/)
 
 ## 1. IAMの作成
 ```sh
@@ -52,7 +59,6 @@ aws cloudformation create-stack --stack-name Demo-NATGW-Stack --template-body fi
 ```
 
 ## 6. RDS Aurora Serverless v2 for PostgreSQL、SecretsManager、RDS Proxy作成
-* TODO: APのRDB対応まで作成不要
 * リソース作成に少し時間がかかる。(20分程度)
 ```sh
 aws cloudformation validate-template --template-body file://cfn-rds.yaml
@@ -70,7 +76,6 @@ aws cloudformation create-stack --stack-name Demo-Bastion-Stack --template-body 
     * 「--parameters ParameterKey=KeyPairName,ParameterValue=myKeyPair」
 
 ## 8. RDBのテーブル作成
-* TODO: APのRDB対応まで作成不要
 * マネージドコンソールからEC2にセッションマネージャで接続し、Bastionにログインする。psqlをインストールし、DB接続する。
     * 以下参考に、Bastionにpsqlをインストールするとよい
         * https://techviewleo.com/how-to-install-postgresql-database-on-amazon-linux/
@@ -160,9 +165,7 @@ make
     * 以下の実行例のURLを、sam deployの結果出力される実際のURLをに置き換えること
 
 * Userサービスでユーザ情報を登録するPOSTのAPI実行例
-    * UserサービスはDynamoDBアクセスするLambda/goのサンプルAP
-    * TODO: RDBアクセスに置き換え予定
-    ~~* UserサービスはRDB(RDS Proxy経由でAuroraへ)アクセスするLambda/goのサンプルAP~~
+    * UserサービスはRDB(RDS Proxy経由でAuroraへ)アクセスするサンプルAP
 ```sh
 curl -X POST -H "Content-Type: application/json" -d '{ "user_name" : "Taro"}' https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users
 
@@ -179,7 +182,7 @@ curl https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users/99bf
 ```
 
 * Todoサービスでやることリストを登録するPOSTのAPI実行例
-    * TodoサービスはDynamoDBアクセスするLambda/goのサンプルAP
+    * TodoサービスはDynamoDBアクセスするサンプルAP
 ```sh
 curl -X POST -H "Content-Type: application/json" -d '{ "todo_title" : "ミルクを買う"}' https://civuzxdd14.execute-api.ap-northeast-1.amazonaws.com/Prod/todo
 
@@ -218,8 +221,27 @@ aws cloudformation delete-stack --stack-name Demo-IAM-Stack
 * ソースコードはcom.example.fwパッケージ配下に格納されている。
     * 本格的な開発を実施する場合には、業務アプリケーションと別のGitリポジトリとして管理し、参照するようにすべきであるが、ここでは、あえて同じプロジェクトに格納してノウハウを簡単に参考にしてもらいやすいようにしている。
 * 各機能と実現方式は、以下の通り。
-    * TODO: 今後記載予定
 
 | 機能 | 機能概要と実現方式 | 拡張実装 | 拡張実装の格納パッケージ |
 | ---- | ---- | ---- | ---- |    
-|  |  |  |  |    
+| オンラインAP制御 | Spring Cloud Functionの機能を利用し、APIの要求受信、ビジネスロジック実行、応答返却まで一連の定型的な処理を実行を制御する。 | - | - |
+| トランザクション管理 | Spring Frameworkのトランザクション管理機能を利用して、@Transactionalアノテーションによる宣言的トランザクションを実現する機能を提供する。 | - | - |
+| RDBアクセス | MyBatisやSpringとの統合機能を利用し、DBコネクション取得、SQLの実行等のRDBへのアクセスのため定型的な処理を実施し、ORマッピングやSQLマッピングと呼ばれるドメイン層とインフラ層のインピーダンスミスマッチを吸収する機能を提供する。 | - | - |
+| DynamoDBアクセス | AWS SDK for Java 2.xのDynamoDB拡張クライアント（DynamoDbEnhancedClient)を使って、DBへのアクセス機能を提供する。 | ○ | com.example.fw.common.dynamodb |
+| プロパティ管理 | SpringBootのプロパティ管理を使用して、APから環境依存のパラメータを切り出し、プロファイルによって動作環境に応じたパラメータ値に置き換え可能とする。 | - | - |
+| DI | Springを利用し、DI（依存性の注入）機能を提供する。 | - | - |
+| AOP | SpringとAspectJAOPを利用し、AOP機能を提供する。 | - | - |
+| ボイラープレートコード排除 | Lombokを利用し、オブジェクトのコンストラクタやGetter/Setter等のソースコードを自動生成し、ボイラープレートコードを排除する。 | - | - |
+
+* 以下は、今後追加適用を検討中。
+
+| 機能 | 機能概要と実現方式 | 拡張実装 | 拡張実装の格納パッケージ |
+| ---- | ---- | ---- | ---- |
+| 入力チェック| Java BeanValidationとSpringのValidation機能を利用し、単項目チェックや相関項目チェックといった画面の入力項目に対する形式的なチェックを実施する。 | ○ | com.example.fw.common.validation |
+| 集約例外ハンドリング | エラー（例外）発生時、エラーログの出力、DBのロールバック、エラー画面やエラー電文の返却といった共通的なエラーハンドリングを実施する。 | ○ | 未定 |
+| 例外 | RuntimeExceptionを継承し、エラーコード（メッセージID）やメッセージを管理可能な共通的なビジネス例外、システム例外を提供する。 | ○ | com.example.fw.common.exception |
+| メッセージ管理 | MessageResourceでログに出力するメッセージを管理する。 | ○ | 未定 |
+| ロギング | Slf4jとLogback、SpringBootのLogback拡張の機能を利用し、プロファイルによって動作環境に応じたログレベルや出力先（ファイルや標準出力）、出力形式（タブ区切りやJSON）に切替可能とする。またメッセージIDをもとにログ出力可能な汎用的なAPIを提供する。 | ○ | com.example.fw.common.logging |
+| オブジェクトストレージ（S3）アクセス | AWS SDK for Java 2.xのS3クライアント（S3Client）を使って、S3のアクセス機能を提供する。開発時にS3アクセスできない場合を考慮して通常のファイルシステムへのFakeに切り替える。 | ○ | com.example.fw.common.objectstorage |
+
+

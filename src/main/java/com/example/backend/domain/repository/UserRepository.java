@@ -1,5 +1,7 @@
 package com.example.backend.domain.repository;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.example.backend.domain.model.User;
 
 /**
@@ -7,8 +9,8 @@ import com.example.backend.domain.model.User;
  * ユーザリポジトリインタフェース 
  *
  */
-//TODO: MyBatisにより実現
-//@Mapper
+//MyBatisにより実現
+@Mapper
 public interface UserRepository {
     /**
      * ユーザを登録する
