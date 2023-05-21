@@ -12,11 +12,11 @@ import com.example.userservice.domain.model.User;
  *
  */
 @Component
-public class UserPutAPIHandler implements Function<User, APIGatewayProxyResponseEvent> {
+public class UserPostAPIHandler implements Function<User, APIGatewayProxyResponseEvent> {
     @Override
     public APIGatewayProxyResponseEvent apply(User user) {
         // TODO: サービス呼び出しの実装
-        String message = "Hello " + user.userName; 
+        String message = "Hello Post:" + user.userName; 
         return createAPIGwResponse(200, message);
     }
     

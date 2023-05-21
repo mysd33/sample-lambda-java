@@ -20,7 +20,7 @@ resolve_s3 = true
 s3_prefix = "todo-java-app"
 region = "ap-northeast-1"
 image_repositories = []
-stack_name = "todo-java-app"
+parameter_overrides = "Stage=\"Prod\" MemorySize=\"2048\""
 
 [default.package.parameters]
 resolve_s3 = true

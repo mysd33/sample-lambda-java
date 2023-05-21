@@ -5,40 +5,76 @@ Description: >
 
   Sample SAM Template for todo-app
 
+Parameters:
+  Stage:
+    Type: String
+    Default: Prod
+  MemorySize:
+    Type: Number
+    MinValue: 128
+    MaxValue: 10240
+    Default: 2048 
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
+    CodeUri: target/todo-app-1.0-aws.jar
     Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest    
     Timeout: 20    
     Runtime: java17    
     Architectures:
       - x86_64
-    MemorySize: 2048      
+    MemorySize: !Ref MemorySize      
     #Tracing: Active
+    # Lambda SnapStart
+    SnapStart:
+      ApplyOn: PublishedVersions
+    AutoPublishAlias: snap         
+    Environment:
+      Variables:
+        # Java Tiered Compilation Optimization
+        JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"         
   #Api:
     #TracingEnabled: true
 Resources:
-  UserServiceFunction:
+# Lambda Function
+  GetUsersFunction:
     Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: target/todo-app-1.0-aws.jar            
-      FunctionName: post-user-function
-      # Lambda SnapStart
-      SnapStart:
-        ApplyOn: PublishedVersions
-      AutoPublishAlias: snap      
+    Properties:      
+      FunctionName: get-user-function   
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
-          SPRING_CLOUD_FUNCTION_DEFINITION: userPutAPIHandler
-          # Java Tiered Compilation Optimization
-          JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"          
+          SPRING_CLOUD_FUNCTION_DEFINITION: userGetAPIHandler
+      Events:
+        UserService:
+          Type: Api
+          Properties:
+            Path: /users/{user_id}
+            Method: GET      
+            RestApiId: !Ref UserApi 
+
+  PostUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:      
+      FunctionName: post-user-function   
+      Environment:
+        Variables:
+          # Spring Cloud Function Environment Variable for function to call
+          SPRING_CLOUD_FUNCTION_DEFINITION: userPostAPIHandler
       Events:
         UserService:
           Type: Api
           Properties:
             Path: /users
-            Method: post            
+            Method: POST      
+            RestApiId: !Ref UserApi 
+# API Gateway
+  UserApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: user-api
+      StageName: !Sub ${Stage}  
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -59,10 +95,16 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   UserServiceApi:
     Description: API Gateway endpoint URL for Prod stage for UserServiceFunction function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users"
-  UserServiceFunction:
-    Description: UserServiceFunction Lambda Function ARN
-    Value: !GetAtt UserServiceFunction.Arn
-  UserServiceFunctionIamRole:
-    Description: Implicit IAM Role created for UserServiceFunction function
-    Value: !GetAtt UserServiceFunctionRole.Arn
+    Value: !Sub "https://${UserApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users"
+  GetUsersFunctionArn:  
+    Description:  GetUsersFunction Lambda Function ARN
+    Value: !GetAtt GetUsersFunction.Arn
+  GetUsersFunctionIamRole:
+    Description: Implicit IAM Role created for GetUsersFunction function
+    Value: !GetAtt GetUsersFunction.Arn
+  PostUsersFunctionArn:  
+    Description:  PostUsersFunction Lambda Function ARN
+    Value: !GetAtt PostUsersFunction.Arn
+  PostUsersFunctionIamRole:
+    Description: Implicit IAM Role created for PostUsersFunction function
+    Value: !GetAtt PostUsersFunction.Arn
