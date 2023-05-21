@@ -5,18 +5,17 @@ import java.util.function.Function;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.example.userservice.domain.model.User;
 
 /**
  * Spring Cloud Functionでのハンドラクラス
  *
  */
 @Component
-public class UserPostAPIHandler implements Function<User, APIGatewayProxyResponseEvent> {
+public class UserPostAPIHandler implements Function<UserResource, APIGatewayProxyResponseEvent> {
     @Override
-    public APIGatewayProxyResponseEvent apply(User user) {
+    public APIGatewayProxyResponseEvent apply(UserResource user) {
         // TODO: サービス呼び出しの実装
-        String message = "User Post:" + user.name; 
+        String message = "User Post:" + user.getUserName(); 
         return createAPIGwResponse(200, message);
     }
     

@@ -1,11 +1,9 @@
 package com.example.userservice.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
-//TODO: JSONのスネークケース対応
-//TODO: Lombok対応の検討
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 public class User {
-    public String userId;
-    public String name;
+    private String userId;
+    private String name;    
 }
