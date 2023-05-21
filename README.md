@@ -11,18 +11,18 @@
 ```sh
 # ビルド
 mvn clean package
-# Windowsにmakeをインストールすればmakeでもいけます
+# Windowsでもmakeをインストールすればmakeでいけます
 make
 
 # デプロイ
 # 1回目
 sam deploy -t template.yaml --guided
-# Windowsにmakeをインストールすればmakeでもいけます
+# Windowsでもmakeをインストールすればmakeでいけます
 make deploy_guided
 
 # 2回目以降
 sam deploy -t template.yaml
-# Windowsにmakeをインストールすればmakeでもいけます
+# Windowsでもmakeをインストールすればmakeでいけます
 make deploy
 
 # AP動作確認
@@ -30,5 +30,7 @@ curl -X POST -H "Content-Type: application/json" -d '{ "userName" : "Taro"}' htt
 
 # スタック削除
 sam delete
+# Windowsでもmakeをインストールすればmakeでいけます
+make delete
 ```
 

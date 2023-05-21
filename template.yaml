@@ -21,7 +21,7 @@ Resources:
   UserServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: target/userservice-1.0-aws.jar            
+      CodeUri: target/todo-app-1.0-aws.jar            
       FunctionName: post-user-function
       # Lambda SnapStart
       SnapStart:

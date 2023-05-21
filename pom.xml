@@ -8,7 +8,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>userservice</artifactId>
+    <artifactId>todo-app</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
     <name>User Serivce</name>
