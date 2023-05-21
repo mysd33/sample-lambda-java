@@ -26,11 +26,18 @@ sam deploy -t template.yaml
 make deploy
 
 # AP動作確認
-## POST
-curl -X POST -H "Content-Type: application/json" -d '{ "userName" : "Taro"}' https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users
-
-## GET
+## ユーザサービス
+### POST
+curl -X POST -H "Content-Type: application/json" -d '{ "name" : "Taro"}' https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users
+### GET
 curl https://42b4c7bk9g.execute-api.ap-northeast-1.amazonaws.com/Prod/users/(ユーザID)
+
+## Todoサービス
+### POST
+curl -X POST -H "Content-Type: application/json" -d '{ "title" : "ミルクを買う"}' https://civuzxdd14.execute-api.ap-northeast-1.amazonaws.com/Prod/todo
+
+### GET
+curl https://civuzxdd14.execute-api.ap-northeast-1.amazonaws.com/Prod/todo/(TODO ID)
 
 # スタック削除
 sam delete

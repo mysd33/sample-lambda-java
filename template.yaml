@@ -25,6 +25,7 @@ Globals:
     Architectures:
       - x86_64
     MemorySize: !Ref MemorySize      
+    # X-Ray
     #Tracing: Active
     # Lambda SnapStart
     SnapStart:
@@ -35,6 +36,7 @@ Globals:
         # Java Tiered Compilation Optimization
         JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"         
   #Api:
+    # X-Ray
     #TracingEnabled: true
 Resources:
 # Lambda Function
@@ -69,12 +71,48 @@ Resources:
             Path: /users
             Method: POST      
             RestApiId: !Ref UserApi 
+# Todo API
+  GetTodoFunction:
+    Type: AWS::Serverless::Function  
+    Properties:
+      FunctionName: get-todo-function
+      Environment:
+        Variables:
+          # Spring Cloud Function Environment Variable for function to call
+          SPRING_CLOUD_FUNCTION_DEFINITION: todoGetAPIHandler
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:            
+            Path: /todo/{todo_id}
+            Method: GET
+            RestApiId: !Ref TodoApi
+  PostTodoFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      FunctionName: post-todo-function
+      Environment:
+        Variables:
+          # Spring Cloud Function Environment Variable for function to call
+          SPRING_CLOUD_FUNCTION_DEFINITION: todoPostAPIHandler
+      Events:
+        PostEvent:
+          Type: Api
+          Properties:
+            Path: /todo
+            Method: POST
+            RestApiId: !Ref TodoApi            
 # API Gateway
   UserApi:
     Type: AWS::Serverless::Api
     Properties:
       Name: user-api
       StageName: !Sub ${Stage}  
+  TodoApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: todo-api
+      StageName: !Sub ${Stage}      
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -108,3 +146,18 @@ Outputs:
   PostUsersFunctionIamRole:
     Description: Implicit IAM Role created for PostUsersFunction function
     Value: !GetAtt PostUsersFunction.Arn
+  TodoServiceApi:
+    Description: API Gateway endpoint URL for Prod stage for TodoServiceFunction function
+    Value: !Sub "https://${TodoApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo"
+  GetTodoFunctionArn:  
+    Description:  GetTodoFunction Lambda Function ARN
+    Value: !GetAtt GetTodoFunction.Arn
+  GetTodoFunctionIamRole:
+    Description: Implicit IAM Role created for GetTodoFunction function
+    Value: !GetAtt GetTodoFunction.Arn
+  PostTodoFunctionArn:  
+    Description:  PostTodoFunction Lambda Function ARN
+    Value: !GetAtt PostTodoFunction.Arn
+  PostTodoFunctionIamRole:
+    Description: Implicit IAM Role created for PostTodoFunction function
+    Value: !GetAtt PostTodoFunction.Arn    
