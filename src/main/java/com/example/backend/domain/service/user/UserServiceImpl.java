@@ -1,10 +1,11 @@
 package com.example.backend.domain.service.user;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import com.example.backend.domain.model.User;
+import com.example.backend.domain.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -12,17 +13,18 @@ import com.example.backend.domain.model.User;
  *
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    
     @Override
     public User create(User user) {
-        //TODO:仮実装
-        user.setUserId(UUID.randomUUID().toString());        
+        userRepository.insert(user);        
         return user;
     }
 
     @Override
     public User findOne(String userId) {
-        //TODO:仮実装
-        return User.builder().userId(userId).name("dummy").build();
+        return userRepository.findOne(userId);
     }
 }

@@ -1,27 +1,29 @@
 package com.example.backend.domain.service.todo;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import com.example.backend.domain.model.Todo;
+import com.example.backend.domain.repository.TodoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * TodoServiceの実装クラス
  *
  */
 @Service
+@RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
+    private final TodoRepository todoRepository;
+    
     @Override
     public Todo create(Todo todo) {
-        //TODO: 仮実装
-        todo.setTodoId(UUID.randomUUID().toString());
+        todoRepository.insert(todo);        
         return todo;
     }
 
     @Override
     public Todo findOne(String todoId) {
-        //TODO: 仮実装
-        return Todo.builder().todoId(todoId).title("dummy").build();
+        return todoRepository.findById(todoId);
     }
 }
