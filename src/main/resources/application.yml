@@ -3,3 +3,8 @@ spring:
     function:
       scan:
         enabled: false
+aws:
+  dynamodb:
+    user-tablename: ${USERS_TABLE_NAME:users}  
+    todo-tablename: ${TODO_TABLE_NAME:todo}
+    

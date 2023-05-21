@@ -14,6 +14,12 @@ Parameters:
     MinValue: 128
     MaxValue: 10240
     Default: 2048 
+  UsersTableName:
+    Type: String
+    Default: users    
+  TodoTableName:
+    Type: String
+    Default: todo
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -35,6 +41,9 @@ Globals:
       Variables:
         # Java Tiered Compilation Optimization
         JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"         
+        # For DynamoDB
+        USERS_TABLE_NAME: !Ref UsersTableName         
+        TODO_TABLE_NAME: !Ref TodoTableName        
   #Api:
     # X-Ray
     #TracingEnabled: true
@@ -43,7 +52,9 @@ Resources:
   GetUsersFunction:
     Type: AWS::Serverless::Function
     Properties:      
-      FunctionName: get-user-function   
+      FunctionName: get-user-function
+      Policies: 
+        - AmazonDynamoDBReadOnlyAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -60,6 +71,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:      
       FunctionName: post-user-function   
+      Policies: 
+        - AmazonDynamoDBFullAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -76,6 +89,8 @@ Resources:
     Type: AWS::Serverless::Function  
     Properties:
       FunctionName: get-todo-function
+      Policies: 
+        - AmazonDynamoDBReadOnlyAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -91,6 +106,8 @@ Resources:
     Type: AWS::Serverless::Function 
     Properties:
       FunctionName: post-todo-function
+      Policies: 
+        - AmazonDynamoDBFullAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call

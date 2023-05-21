@@ -31,6 +31,7 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>dynamodb</artifactId>
+            <!--
             <exclusions>
                 <exclusion>
                     <groupId>software.amazon.awssdk</groupId>
@@ -41,7 +42,12 @@
                     <artifactId>apache-client</artifactId>
                 </exclusion>
             </exclusions>
+            -->
         </dependency>
+        <dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>dynamodb-enhanced</artifactId>
+		</dependency>
         <!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
