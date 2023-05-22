@@ -83,13 +83,12 @@ Globals:
               - ":"
               - Fn::ImportValue: !Sub ${StackPrefix}-RDSClusterEndpointPort
               - "/"
-              - Fn::ImportValue: !Sub ${StackPrefix}-RDSDBName        
-
-    #TODO: CodeDeploy
-    #DeploymentPreference:
-    #  Type: AllAtOnce             
+              - Fn::ImportValue: !Sub ${StackPrefix}-RDSDBName
+    DeploymentPreference:
+      Type: AllAtOnce             
       #Type: Linear10PercentEvery1Minute    
   Api:
+    OpenApiVersion: 3.0.3  
     EndpointConfiguration:
       Type: PRIVATE
       VPCEndpointIds:
@@ -99,6 +98,9 @@ Globals:
         LoggingLevel: 'ERROR'
         ResourcePath: '/*'
         HttpMethod: '*'    
+    AccessLogSetting:
+      Format: '{ "requestId":"$context.requestId", "extendedRequestId":"$context.extendedRequestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "resourcePath":"$context.resourcePath", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength", "integrationLatency":"$context.integration.latency", "responseLatency":"$context.responseLatency" }'
+      DestinationArn: !GetAtt ApiGwAccessLogGroup.Arn        
     # X-Ray is Disable if SnapStart is Enabled
     #TracingEnabled: true
 
@@ -235,7 +237,13 @@ Resources:
     Type: AWS::ApiGateway::Account
     Properties:
       CloudWatchRoleArn: !GetAtt APIGatewayRole.Arn
-
+# API Gateway Access Log Group
+  ApiGwAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/apigateway/accesslog/${AWS::StackName}
+      RetentionInDays: 7
+      
 # Application Insights     
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group

@@ -148,18 +148,6 @@ set DB_PASSWORD=password
 make deploy
 ```
 
-* （参考）再度ビルドするとき
-```sh
-# .aws-sam配下のビルド資材を削除
-rmdir /s /q .aws-sam
-# ビルド
-sam build
-
-# Windowsでもmakeをインストールすればmakeでいけます
-make
-```
-
-
 ## 11. APの実行確認
 * マネージドコンソールから、EC2(Bation)へSystems Manager Session Managerで接続して、curlコマンドで動作確認
     * 以下の実行例のURLを、sam deployの結果出力される実際のURLをに置き換えること
