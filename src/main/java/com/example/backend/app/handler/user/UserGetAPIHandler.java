@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.amazonaws.xray.AWSXRay;
 import com.example.backend.app.handler.common.APIUtil;
 import com.example.backend.domain.model.User;
 import com.example.backend.domain.service.user.UserService;
@@ -25,9 +24,7 @@ public class UserGetAPIHandler implements Function<APIGatewayProxyRequestEvent, 
     private final ObjectMapper objectMapper;
 
     @Override
-    public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent request) {
-        AWSXRay.beginSegment("user-get-api");
-        
+    public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent request) {       
         String userId = request.getPathParameters().get("user_id");
         // サービスの実行
         User user = userService.findOne(userId);

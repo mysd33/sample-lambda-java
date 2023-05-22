@@ -2,6 +2,7 @@ package com.example.backend.infra.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.model.User;
 import com.example.backend.domain.repository.UserRepository;
 
@@ -15,6 +16,7 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 /**
  * DynamoDBにアクセスするUserRepository実装クラス
  */
+@XRayEnabled
 //MyBatis版に置き換えたため未使用
 //@Repository
 @RequiredArgsConstructor

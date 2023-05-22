@@ -15,9 +15,8 @@
 ![構成イメージ](image/demo.png)
 
 * X-Rayによる可視化
-    * API Gateway、Lambdaにおいて、X-Rayによる可視化にも対応している
-    * TODO: RDB(RDS Aurora)へのアクセス、DynamoDBへのアクセスのトレースへも対応中
-        * 現状、java.lang.ClassCastException: class com.amazonaws.xray.entities.SegmentImpl cannot be cast to class com.amazonaws.xray.entities.Subsegmentのエラー出てしまう
+    * API Gateway、Lambdaにおいて、X-Rayによる可視化にも対応している    
+    * RDB(RDS Aurora)へのアクセス、DynamoDBへのアクセスのトレースにも対応    
 
 ![X-Rayの可視化の例](image/xray.png)
 

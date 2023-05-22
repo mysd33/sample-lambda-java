@@ -5,7 +5,6 @@ import java.util.function.Function;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.amazonaws.xray.AWSXRay;
 import com.example.backend.app.handler.common.APIUtil;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
@@ -25,7 +24,6 @@ public class TodoPostAPIHandler implements Function<TodoResource, APIGatewayProx
 
     @Override
     public APIGatewayProxyResponseEvent apply(TodoResource resource) {
-        AWSXRay.beginSegment("todo-post-api");
         
         Todo todo = Todo.builder().title(resource.getTodoTitle()).build();
         // サービスの実行

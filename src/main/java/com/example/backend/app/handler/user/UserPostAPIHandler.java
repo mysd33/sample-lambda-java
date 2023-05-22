@@ -5,7 +5,6 @@ import java.util.function.Function;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.amazonaws.xray.AWSXRay;
 import com.example.backend.app.handler.common.APIUtil;
 import com.example.backend.domain.model.User;
 import com.example.backend.domain.service.user.UserService;
@@ -24,9 +23,7 @@ public class UserPostAPIHandler implements Function<UserResource, APIGatewayProx
     private final ObjectMapper objectMapper;
 
     @Override
-    public APIGatewayProxyResponseEvent apply(UserResource resource) {
-        AWSXRay.beginSegment("user-post-api");
-        
+    public APIGatewayProxyResponseEvent apply(UserResource resource) {        
         User user = User.builder().name(resource.getUserName()).build();
         // サービスの実行
         User newUser = userService.create(user);
