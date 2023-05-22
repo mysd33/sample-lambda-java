@@ -52,9 +52,8 @@ Globals:
     Runtime: java17    
     Architectures:
       - x86_64
-    MemorySize: !Ref MemorySize      
-    # X-Ray is Disable if SnapStart is Enabled
-    #Tracing: Active
+    MemorySize: !Ref MemorySize        
+    Tracing: Active
     # Lambda SnapStart
     SnapStart:
       ApplyOn: PublishedVersions
@@ -100,9 +99,8 @@ Globals:
         HttpMethod: '*'    
     AccessLogSetting:
       Format: '{ "requestId":"$context.requestId", "extendedRequestId":"$context.extendedRequestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "resourcePath":"$context.resourcePath", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength", "integrationLatency":"$context.integration.latency", "responseLatency":"$context.responseLatency" }'
-      DestinationArn: !GetAtt ApiGwAccessLogGroup.Arn        
-    # X-Ray is Disable if SnapStart is Enabled
-    #TracingEnabled: true
+      DestinationArn: !GetAtt ApiGwAccessLogGroup.Arn            
+    TracingEnabled: true
 
 Resources:
 # Lambda Function

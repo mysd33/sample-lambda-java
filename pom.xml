@@ -21,6 +21,7 @@
         <aws-sdk.version>2.20.55</aws-sdk.version>
         <aws-lambda-java-core.version>1.2.2</aws-lambda-java-core.version>
         <aws-lambda-java-events.version>3.11.1</aws-lambda-java-events.version>
+        <awsxray.bom.version>2.14.0</awsxray.bom.version>
         <org-crac.version>0.1.3</org-crac.version>        
     </properties>
 
@@ -91,10 +92,28 @@
           <artifactId>junit</artifactId>          
           <scope>test</scope>
         </dependency>
+        <!-- AWS X-Ray -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-xray-recorder-sdk-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-xray-recorder-sdk-aws-sdk-v2</artifactId>
+		</dependency>	
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-xray-recorder-sdk-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-xray-recorder-sdk-sql</artifactId>
+		</dependency>
     </dependencies>
 
     <dependencyManagement>
-        <dependencies>
+        <dependencies>		
+			<!-- Spring Cloud -->			
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -102,6 +121,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+			<!-- AWS SDK -->            
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
@@ -109,6 +129,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+			<!-- AWS X-Ray -->
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-xray-recorder-sdk-bom</artifactId>
+				<version>${awsxray.bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>            
         </dependencies>
     </dependencyManagement>
 

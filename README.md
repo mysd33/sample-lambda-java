@@ -6,14 +6,21 @@
         * https://catalog.workshops.aws/java-on-aws-lambda/en-US/03-snapstart
         * https://maciejwalkowiak.com/blog/create-spring-cloud-function-aws-sam/
         * https://docs.spring.io/spring-cloud-function/docs/current/reference/html/
-* なお、SnapStartの制約ため、X-Rayは未対応となる。    
-
-![構成イメージ](image/demo.png)
 
 * API GatewayをPrivate APIで公開
     * VPC内にEC2で構築した、Bastionからアクセスする
 * LambdaからDynamoDBやRDS AuroraへのDBアクセスを実現
     * LambdaはVPC内Lambdaとして、RDS Aurora（RDS Proxy経由）でのアクセスも可能としている
+
+![構成イメージ](image/demo.png)
+
+* X-Rayによる可視化
+    * API Gateway、Lambdaにおいて、X-Rayによる可視化にも対応している
+    * TODO: RDB(RDS Aurora)へのアクセス、DynamoDBへのアクセスのトレースへも対応中
+        * 現状、java.lang.ClassCastException: class com.amazonaws.xray.entities.SegmentImpl cannot be cast to class com.amazonaws.xray.entities.Subsegmentのエラー出てしまう
+
+![X-Rayの可視化の例](image/xray.png)
+
 
 ## 事前準備
 * 以下のライブラリを用いているので、EclipseのようなIDEを利用する場合には、プラグインのインストールが必要

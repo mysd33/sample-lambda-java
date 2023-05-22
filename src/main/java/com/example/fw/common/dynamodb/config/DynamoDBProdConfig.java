@@ -4,6 +4,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.amazonaws.xray.interceptors.TracingInterceptor;
+
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
@@ -21,8 +24,13 @@ public class DynamoDBProdConfig {
     @Bean
     public DynamoDbClient dynamoDbClient(DynamoDBConfigurationProperties dynamoDBConfigurationProperties) {
         Region region = Region.of(dynamoDBConfigurationProperties.getRegion());
-        return DynamoDbClient.builder()//
-                .region(region)//                
+        return DynamoDbClient.builder().region(region)
+                
+                //TODO: 現状　SQLトレース対応しようとすると、X-Rayでエラーが出るので対応検討中
+                //java.lang.ClassCastException: class com.amazonaws.xray.entities.SegmentImpl cannot be cast to class com.amazonaws.xray.entities.Subsegment 
+                // 個別にDynamoDBへのAWS SDKの呼び出しをトレーシングできるように設定
+                //.overrideConfiguration(
+                //        ClientOverrideConfiguration.builder().addExecutionInterceptor(new TracingInterceptor()).build())
                 .build();
     }
 

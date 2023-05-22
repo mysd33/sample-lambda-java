@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.amazonaws.xray.AWSXRay;
 import com.example.backend.app.handler.common.APIUtil;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
@@ -25,6 +26,8 @@ public class TodoGetAPIHandler implements Function<APIGatewayProxyRequestEvent, 
 
     @Override
     public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent request) {
+        AWSXRay.beginSegment("todo-get-api");
+        
         String todoId = request.getPathParameters().get("todo_id");
         // サービスの実行
         Todo todo = todoService.findOne(todoId);
