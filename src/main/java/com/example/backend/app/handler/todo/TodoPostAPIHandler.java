@@ -18,18 +18,18 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class TodoPostAPIHandler implements Function<TodoResource, APIGatewayProxyResponseEvent> {
+public class TodoPostAPIHandler implements Function<TodoResourceForInput, APIGatewayProxyResponseEvent> {
     private final TodoService todoService;
+    private final TodoResourceMapper todoResourceMapper;
     private final ObjectMapper objectMapper;
 
     @Override
-    public APIGatewayProxyResponseEvent apply(TodoResource resource) {
+    public APIGatewayProxyResponseEvent apply(TodoResourceForInput resource) {
         
-        Todo todo = Todo.builder().title(resource.getTodoTitle()).build();
+        Todo todo = todoResourceMapper.resourceToModel(resource);        
         // サービスの実行
         Todo newTodo = todoService.create(todo);
-        // TODO: Mapstructでのオブジェクトコピー
-        TodoResource result = TodoResource.builder().todoId(newTodo.getTodoId()).todoTitle(newTodo.getTitle()).build();
+        TodoResource result = todoResourceMapper.modelToResource(newTodo);
         return APIUtil.createAPIGwResponse(objectMapper, result);
     }
 

@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserGetAPIHandler implements Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private final UserService userService;
+    private final UserResourceMapper userResourceMapper;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -28,8 +29,7 @@ public class UserGetAPIHandler implements Function<APIGatewayProxyRequestEvent, 
         String userId = request.getPathParameters().get("user_id");
         // サービスの実行
         User user = userService.findOne(userId);
-        // TODO: Mapstructでのオブジェクトコピー
-        UserResource result = UserResource.builder().userId(user.getUserId()).userName(user.getName()).build();
+        UserResource result = userResourceMapper.modelToResource(user);
         return APIUtil.createAPIGwResponse(objectMapper, result);
     }
 

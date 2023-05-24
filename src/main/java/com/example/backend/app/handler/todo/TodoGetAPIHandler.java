@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodoGetAPIHandler implements Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private final TodoService todoService;
+    private final TodoResourceMapper todoResourceMapper;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -29,8 +30,7 @@ public class TodoGetAPIHandler implements Function<APIGatewayProxyRequestEvent, 
         String todoId = request.getPathParameters().get("todo_id");
         // サービスの実行
         Todo todo = todoService.findOne(todoId);
-        // TODO: Mapstructでのオブジェクトコピー
-        TodoResource result = TodoResource.builder().todoId(todo.getTodoId()).todoTitle(todo.getTitle()).build();
+        TodoResource result = todoResourceMapper.modelToResource(todo);        
         return APIUtil.createAPIGwResponse(objectMapper, result);
     }
 

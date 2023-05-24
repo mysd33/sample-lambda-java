@@ -26,7 +26,7 @@
     * [Lombok](https://projectlombok.org/)
         * [Eclipseへのプラグインインストール](https://projectlombok.org/setup/eclipse)
         * [IntelliJへのプラグインインストール](https://projectlombok.org/setup/intellij)
-    * TODO: [Mapstruct](https://mapstruct.org/)の利用も検討中
+    * [Mapstruct](https://mapstruct.org/)
         * [EclipseやIntelliJへのプラグインインストール](https://mapstruct.org/documentation/ide-support/)
 
 ## 1. IAMの作成
@@ -221,8 +221,9 @@ aws cloudformation delete-stack --stack-name Demo-IAM-Stack
 | オンラインAP制御 | Spring Cloud Functionの機能を利用し、APIの要求受信、ビジネスロジック実行、応答返却まで一連の定型的な処理を実行を制御する。 | - | - |
 | トランザクション管理 | Spring Frameworkのトランザクション管理機能を利用して、@Transactionalアノテーションによる宣言的トランザクションを実現する機能を提供する。 | - | - |
 | RDBアクセス | MyBatisやSpringとの統合機能を利用し、DBコネクション取得、SQLの実行等のRDBへのアクセスのため定型的な処理を実施し、ORマッピングやSQLマッピングと呼ばれるドメイン層とインフラ層のインピーダンスミスマッチを吸収する機能を提供する。 | - | - |
-| DynamoDBアクセス | AWS SDK for Java 2.xのDynamoDB拡張クライアント（DynamoDbEnhancedClient)を使って、DBへのアクセス機能を提供する。 | ○ | com.example.fw.common.dynamodb |
+| DynamoDBアクセス | AWS SDK for Java 2.xのDynamoDB拡張クライアント（DynamoDbEnhancedClient）を使って、DBへのアクセス機能を提供する。 | ○ | com.example.fw.common.dynamodb |
 | プロパティ管理 | SpringBootのプロパティ管理を使用して、APから環境依存のパラメータを切り出し、プロファイルによって動作環境に応じたパラメータ値に置き換え可能とする。 | - | - |
+| オブジェクトマッピング | MapStructを利用し、類似のプロパティを持つリソースオブジェクトやDTOとドメインオブジェクト間で、値のコピーやデータ変換処理を簡単にかつ高速に行えるようにする。 | - | - |
 | DI | Springを利用し、DI（依存性の注入）機能を提供する。 | - | - |
 | AOP | SpringとAspectJAOPを利用し、AOP機能を提供する。 | - | - |
 | ボイラープレートコード排除 | Lombokを利用し、オブジェクトのコンストラクタやGetter/Setter等のソースコードを自動生成し、ボイラープレートコードを排除する。 | - | - |

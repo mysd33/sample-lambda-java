@@ -25,6 +25,7 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 @RequiredArgsConstructor
 public class TodoRepositoryImplByDynamoDB implements TodoRepository {
     private final DynamoDbEnhancedClient enhancedClient;
+    private final TodoTableItemMapper todoTableItemMapper;
 
     @Value("${aws.dynamodb.todo-tablename}")
     private String todoTableName;
@@ -36,13 +37,10 @@ public class TodoRepositoryImplByDynamoDB implements TodoRepository {
     @Override
     public boolean insert(Todo todo) {        
         todo.setTodoId(UUID.randomUUID().toString());
-        DynamoDbTable<TodoTableItem> dynamoDb = createDynamoDBClient();
-        TodoTableItem todoItem = TodoTableItem.builder()//
-                .todoId(todo.getTodoId())//
-                .title(todo.getTitle())//
-                .build();
+        TodoTableItem todoItem = todoTableItemMapper.modelToTableItem(todo);
+        
+        DynamoDbTable<TodoTableItem> dynamoDb = createDynamoDBClient();              
         dynamoDb.putItem(todoItem);
-
         return true;
     }
 
@@ -50,12 +48,8 @@ public class TodoRepositoryImplByDynamoDB implements TodoRepository {
     public Todo findById(String todoId) {
         DynamoDbTable<TodoTableItem> dynamoDb = createDynamoDBClient();
         Key key = Key.builder().partitionValue(todoId).build();
-        TodoTableItem todoItem = dynamoDb.getItem(r -> r.key(key));
-        // TODO: Mapstructでのオブジェクトコピー
-        return Todo.builder()//
-                .todoId(todoItem.getTodoId())//
-                .title(todoItem.getTitle())//
-                .build();
+        TodoTableItem todoItem = dynamoDb.getItem(r -> r.key(key));        
+        return todoTableItemMapper.tableItemToModel(todoItem);
     }
 
     private DynamoDbTable<TodoTableItem> createDynamoDBClient() {

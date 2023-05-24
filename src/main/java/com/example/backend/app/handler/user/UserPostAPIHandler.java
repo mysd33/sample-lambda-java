@@ -20,15 +20,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserPostAPIHandler implements Function<UserResource, APIGatewayProxyResponseEvent> {
     private final UserService userService;
+    private final UserResourceMapper userResourceMapper;
     private final ObjectMapper objectMapper;
 
     @Override
-    public APIGatewayProxyResponseEvent apply(UserResource resource) {        
-        User user = User.builder().name(resource.getUserName()).build();
+    public APIGatewayProxyResponseEvent apply(UserResource resource) {                
+        User user = userResourceMapper.resourceToModel(resource);
         // サービスの実行
         User newUser = userService.create(user);
-        // TODO: Mapstructでのオブジェクトコピー
-        UserResource result = UserResource.builder().userId(newUser.getUserId()).userName(newUser.getName()).build();
+        UserResource result = userResourceMapper.modelToResource(newUser);
         return APIUtil.createAPIGwResponse(objectMapper, result);
     }
 
