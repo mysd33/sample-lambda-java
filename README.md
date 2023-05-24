@@ -1,6 +1,5 @@
-# Private APIでのAPIGatewayを使ったLambda/Java/SpringBoot&CloudFunctionのAWS SAMサンプルAP
-
-## 構成イメージ
+# Private APIでのAPIGatewayを使ったLambda/Java + Spring Boot&Spring Cloud FunctionのAWS SAMサンプルAP
+# 構成イメージ
 * Spring Cloud Functionを利用したAPIGateway/LambdaによるJavaアプリケーションを実装している。 また、Javaのコールドスタートの高速化対策のため、Lambda SnapStartを利用している。
     * 参考サイト
         * https://catalog.workshops.aws/java-on-aws-lambda/en-US/03-snapstart
