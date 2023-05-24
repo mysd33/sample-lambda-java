@@ -141,11 +141,11 @@
     </dependencyManagement>
 
     <build>
-      <plugins>
-            <!-- Lombok -->
+      <plugins>            
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- Lombok -->
                 <configuration>
                     <excludes>
                         <exclude>
@@ -154,11 +154,7 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <!-- https://github.com/spring-projects-experimental/spring-boot-thin-launcher -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- https://github.com/spring-projects-experimental/spring-boot-thin-launcher -->
                 <dependencies>
                     <dependency>
                         <groupId>org.springframework.boot.experimental</groupId>

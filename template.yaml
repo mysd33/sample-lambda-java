@@ -24,6 +24,9 @@ Parameters:
   TodoTableName:
     Type: String
     Default: todo
+  TracingValue:
+    Type: String
+    Default: Active    
   DBUsername:
     NoEcho: 'true'
     Description: Username for PostgreSQL database access
@@ -42,6 +45,8 @@ Parameters:
     AllowedPattern: '[a-zA-Z0-9]*'
     ConstraintDescription: must contain only alphanumeric characters.
     Default: password
+Conditions:
+  TracingEnabled: !Equals [!Ref TracingValue, Active]
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -53,7 +58,7 @@ Globals:
     Architectures:
       - x86_64
     MemorySize: !Ref MemorySize        
-    Tracing: Active
+    Tracing: !Ref TracingValue
     # Lambda SnapStart
     SnapStart:
       ApplyOn: PublishedVersions
@@ -100,7 +105,7 @@ Globals:
     AccessLogSetting:
       Format: '{ "requestId":"$context.requestId", "extendedRequestId":"$context.extendedRequestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "resourcePath":"$context.resourcePath", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength", "integrationLatency":"$context.integration.latency", "responseLatency":"$context.responseLatency" }'
       DestinationArn: !GetAtt ApiGwAccessLogGroup.Arn            
-    TracingEnabled: true
+    TracingEnabled: !If [TracingEnabled , true, false]
 
 Resources:
 # Lambda Function
