@@ -145,12 +145,8 @@ sam deploy --guided
 make deploy_guided
 
 # 2回目以降は
-set DB_USER_NAME=postgres
-set DB_PASSWORD=password
-sam deploy -t template.yaml --parameter-overrides DBUsername=%DB_USER_NAME% DBPassword=%DB_PASSWORD%
+sam deploy -t template.yaml
 # Windowsでもmakeをインストールすればmakeでいけます
-set DB_USER_NAME=postgres
-set DB_PASSWORD=password
 make deploy
 ```
 

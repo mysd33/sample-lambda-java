@@ -23,7 +23,7 @@ deploy_guided:
 	sam deploy -t template.yaml --guided
 
 deploy:
-	sam deploy -t template.yaml --parameter-overrides DBUsername=%DB_USER_NAME% DBPassword=%DB_PASSWORD%
+	sam deploy -t template.yaml
 
 delete:
 	sam delete
