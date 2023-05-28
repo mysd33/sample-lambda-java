@@ -95,8 +95,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:      
       FunctionName: get-user-function
-      Policies: 
-        - AmazonDynamoDBReadOnlyAccess       
+      #Policies: 
+      #  - AmazonDynamoDBReadOnlyAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -113,8 +113,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:      
       FunctionName: post-user-function   
-      Policies: 
-        - AmazonDynamoDBFullAccess       
+      #Policies: 
+      #  - AmazonDynamoDBFullAccess       
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
