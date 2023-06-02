@@ -131,7 +131,8 @@ aws cloudformation create-stack --stack-name Demo-DynamoDB-Stack --template-body
 
 
 ## 10. AWS SAMでLambda/API Gatewayのデプロイ       
-* SAMビルド    
+* ビルド    
+    * SAMビルドは使用せず、mvnコマンドを直接使用する
 ```sh
 # トップのフォルダに戻る
 cd ..
