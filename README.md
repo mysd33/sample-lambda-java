@@ -143,7 +143,7 @@ make
 * SAMデプロイ
 ```sh
 # 1回目は
-sam deploy --guided
+sam deploy -t template.yaml --guided
 # Windowsでもmakeをインストールすればmakeでいけます
 make deploy_guided
 
