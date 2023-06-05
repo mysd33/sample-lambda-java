@@ -21,7 +21,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 public class DynamoDBProdConfig {
 
     /**
-     * DynamoDB Localに接続するDynamoDBClient
+     * DynamoDBに接続するDynamoDBClient
      */
     /*
     @Bean
@@ -35,7 +35,7 @@ public class DynamoDBProdConfig {
     }*/
 
     /**
-     * DynamoDB Localに接続するDynamoDBAyncClient
+     * DynamoDBに接続するDynamoDBAyncClient
      */
     @Bean
     public DynamoDbAsyncClient dynamoDbAsyncClient(DynamoDBConfigurationProperties dynamoDBConfigurationProperties) {
