@@ -27,6 +27,18 @@ Parameters:
   TracingValue:
     Type: String
     Default: Active
+  GetUsersFunctionName:
+    Type: String
+    Default: get-user-function
+  PostUsersFunctionName:
+    Type: String
+    Default: post-user-function
+  GetTodoFunctionName:    
+    Type: String
+    Default: get-todo-function  
+  PostTodoFunctionName:
+    Type: String
+    Default: post-todo-function     
 Conditions:
   TracingEnabled: !Equals [!Ref TracingValue, Active]
 
@@ -94,9 +106,7 @@ Resources:
   GetUsersFunction:
     Type: AWS::Serverless::Function
     Properties:      
-      FunctionName: get-user-function
-      #Policies: 
-      #  - AmazonDynamoDBReadOnlyAccess       
+      FunctionName: !Ref GetUsersFunctionName
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -112,9 +122,7 @@ Resources:
   PostUsersFunction:
     Type: AWS::Serverless::Function
     Properties:      
-      FunctionName: post-user-function   
-      #Policies: 
-      #  - AmazonDynamoDBFullAccess       
+      FunctionName: !Ref PostUsersFunctionName  
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -130,9 +138,11 @@ Resources:
   GetTodoFunction:
     Type: AWS::Serverless::Function  
     Properties:
-      FunctionName: get-todo-function
-      Policies: 
-        - AmazonDynamoDBReadOnlyAccess       
+      FunctionName: !Ref GetTodoFunctionName
+      Policies:        
+        - DynamoDBReadPolicy:
+            TableName:
+              !Ref TodoTableName        
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -147,9 +157,11 @@ Resources:
   PostTodoFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      FunctionName: post-todo-function
-      Policies: 
-        - AmazonDynamoDBFullAccess       
+      FunctionName: !Ref PostTodoFunctionName
+      Policies:       
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Ref TodoTableName        
       Environment:
         Variables:
           # Spring Cloud Function Environment Variable for function to call
@@ -228,7 +240,29 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/apigateway/accesslog/${AWS::StackName}
       RetentionInDays: 7
-      
+
+# Lambda Log group
+  GetUsersFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetUsersFunctionName}
+      RetentionInDays: 7      
+  PostUsersFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PostUsersFunctionName}
+      RetentionInDays: 7
+  GetTodoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetTodoFunctionName}
+      RetentionInDays: 7
+  PostTodoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PostTodoFunctionName}
+      RetentionInDays: 7
+
 # Application Insights     
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
